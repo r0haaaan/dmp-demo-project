@@ -1,0 +1,74 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <!--
+  Simple sample program including Java code.
+
+  This helloworld exactly has been taken over mostly from https://github.com/arun-gupta/docker-java-sample.git
+-->
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>io.fabric8</groupId>
+  <artifactId>dockerfile</artifactId>
+  <version>0.30-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <name>dmp-sample-dockerfile</name>
+
+  <properties>
+    <file>welcome.txt</file>
+    <base>jetty</base>
+    <project.artifactId>${project.artifactId}</project.artifactId>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.5</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>io.fabric8</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+	<version>0.30-SNAPSHOT</version>
+	<configuration>
+	  <portPropertyFile>${project.basedir}/src/main/resources/ports.properties</portPropertyFile>
+	  <images>
+	    <image>
+	      <name>test-db</name>
+	      <alias>dockerfile</alias>
+	      <build>
+		<dockerFileDir>${project.basedir}/src/main/docker</dockerFileDir>
+	      </build>
+	      <run>
+		<ports>
+		  <port>host.port:5432</port>
+		</ports>
+		<wait>
+		  <time>5000</time>
+		</wait>
+	      </run>
+	    </image>
+	  </images>
+	</configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
